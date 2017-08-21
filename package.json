@@ -1,0 +1,17 @@
+{
+  "name": "sw-lab",
+  "version": "1.0.0",
+  "description": "Service worker lab",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anand Mohan",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.6"
+  },
+  "devDependencies": {
+    "webpack": "^3.5.5"
+  }
+}
