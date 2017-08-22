@@ -3,16 +3,16 @@
 import angular from 'angular'
 
 import template from './messageTemplate.html'
-import controller from './messageController.js'
+import controller from './messageController'
 
-let messageComponent = angular.component('swLabMessage', {
+let messageComponent = {
     controller: controller,
     controllerAs: 'vm',
     bindings: {
         message: '<'
     },
     template: template
-})
+}
 
 export default messageComponent
 
