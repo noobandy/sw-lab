@@ -2,7 +2,7 @@
 
 class HomeController {
     constructor() {
-        this.message = "Hellow' World!"
+        this.message = "Home"
     }
 
     $onInit() {
