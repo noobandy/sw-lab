@@ -1,5 +1,5 @@
 'use strict'
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
-
+import './themes/sticky-footer.css'
 import angular from 'angular'
 import uiRouter from 'angular-ui-router'
