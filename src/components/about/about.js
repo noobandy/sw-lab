@@ -1,33 +1,19 @@
 'use strict'
 import angular from 'angular'
 import uiRouter from 'angular-ui-router'
+import aboutComponent from './aboutComponent'
 
-class AboutController {
-    constructor() {
-    }
-
-    $onInit() {
-        this.message = 'About'
-    }
-}
-
-let template = '<message message="vm.message"><message>'
-
-let aboutModule = angular.module('about', [uiRouter])
+const aboutModule = angular.module('about', [uiRouter])
 .config(
     /*@ngInject*/
     function($stateProvider) {
         $stateProvider.state({
             name: 'about',
             url: '/about',
-            component: 'about'
+            component: 'about',
         })
     }
 )
-.component('about', {
-    controller: AboutController,
-    template: template,
-    controllerAs: 'vm'
-})
+.component('about', aboutComponent)
 
 export default aboutModule.name

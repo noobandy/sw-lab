@@ -3,14 +3,28 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css'
 
 import angular from 'angular'
 import uiRouter from 'angular-ui-router'
+import angularSanitize from 'angular-sanitize'
+import translate from 'angular-translate'
+import translatePartialLoader from 'angular-translate-loader-partial'
 import swLabComponents from './components/components'
 
 
-angular.module('swLab', [uiRouter, swLabComponents])
+angular.module('swLab', [uiRouter, angularSanitize, translate, swLabComponents])
 .config(
     /*@ngIngect*/
-    function($urlRouterProvider) {
-        $urlRouterProvider.otherwise('/');
+    function($urlRouterProvider, $translateProvider, $translatePartialLoaderProvider) {
+        $urlRouterProvider.otherwise('/')
+
+        $translateProvider.useSanitizeValueStrategy('sanitize')
+        
+        $translateProvider.useLoader('$translatePartialLoader', {
+            urlTemplate: '/{part}/{lang}.json'
+        })
+
+        $translatePartialLoaderProvider.addPart('I18N')
+
+
+        $translateProvider.preferredLanguage('en')
     }
 )
 .run(

@@ -5,45 +5,43 @@ const del = require('del')
 const replace = require('gulp-string-replace')
 const bump = require('gulp-bump');
 const prompt = require('gulp-prompt')
+const swPrecache = require('sw-precache');
+const filter = require('gulp-filter')
 
-gulp.task('clean', function(cb) {
+/**
+ * then(function(result) {
+
+        return new Promise(function(resolve, reject) {
+            const pkg = require('./package.json')
+            
+            gulp.src('dist/index.html', { base: 'dist'})
+            .pipe(replace(new RegExp('@version@', 'g'), pkg.version))
+            .on('error', reject)
+            .pipe(gulp.dest('dist'))
+            .on('end', resolve)
+        })
+       
+    })
+ */
+gulp.task('clean', function() {
     return del(['dist'])
 })
 
-gulp.task('webpack', ['clean'], function(cb) {
+gulp.task('webpack', ['clean'], function() {
+    return new Promise(function(resolve, reject) {
+        webpak(webpackConfig, function(err, stats) {
+            if(err || stats.hasErrors()) {
+               return reject(err)
+            }
 
-    webpak(webpackConfig, function(err, stats) {
-        if(err || stats.hasErrors()) {
-            return cb(err)
-        }
-
-        console.log("build complete")
-
-        
-        cb(null)
+            return resolve(stats)
+        })
     })
 })
 
-gulp.task('generate-service-worker',['webpack'], function(callback) {
-    var swPrecache = require('sw-precache');
-    var rootDir = 'app';
-  
-    swPrecache.write('sw.js', {
-        dontCacheBustUrlsMatching : '/./',
-        staticFileGlobs: ['dist/**/*.{js,css,png,jpg,gif,svg,eot,ttf,woff}'],
-        stripPrefix: 'dist'
-    }, callback);
-});
+gulp.task('version', function() {
 
-gulp.task('build', ['generate-service-worker'], function(cb) {
-    return Promise.all([new Promise(function(resolve, reject) {
-         // copy service worker to dist folder
-        gulp.src('sw.js')
-        .on('error', reject)
-        .pipe(gulp.dest('dist'))
-        .on('end', resolve)
-    }), new Promise(function(resolve, reject) {
-
+    return new Promise(function(resolve, reject) {
         gulp.src('package.json').pipe(prompt.prompt([{
             type: 'list',
             name: 'releaseType',
@@ -51,18 +49,73 @@ gulp.task('build', ['generate-service-worker'], function(cb) {
             choices: ['none', 'major', 'minor', 'patch']
         }], function(userResponse) {
             if(userResponse.releaseType && userResponse.releaseType !== 'none') {
-                gulp.src('package.json')
-                .pipe(bump({type: userResponse.releaseType}))
-                .on('error', reject)
-                .pipe(gulp.dest('./'))
-                .on('end', resolve)
+                 // bump versions
+
+                return Promise.all([new Promise(function(resolve, reject){
+                    
+                    gulp.src('package.json')
+                    .pipe(bump({type: userResponse.releaseType}))
+                    .on('error', reject)
+                    .pipe(gulp.dest('./'))
+                    .on('end', resolve)
+
+                }), new Promise(function(resolve, reject) {
+
+                    gulp.src('src/I18N/*.json')
+                    .pipe(bump({type: userResponse.releaseType}))
+                    .on('error', reject)
+                    .pipe(gulp.dest('./src/I18N/'))
+                    .on('end', resolve)
+
+                })]).then(function() {
+                    resolve()
+                }).catch(function(err) {
+                    reject(err)
+                })
             }
+
+            return resolve();
         }))
-    })]).then(function() {
-        const pkg = require('./package.json')
-        gulp.src('dist/index.html', { base: 'dist'})
-        .pipe(replace(new RegExp('@version@', 'g'), pkg.version)).
-        pipe(gulp.dest('dist'))
+
+    })
+})
+
+gulp.task('build', ['webpack'], function(cb) {
+
+    return new Promise(function(resolve, reject) {
+       
+        // copy I18N files
+        gulp.src('src/I18N/*.json', {base: 'src'})
+        .pipe(gulp.dest('dist'))
+        .on('error', reject)
+        .on('end', resolve)
+
+    }).then(function() {
+        // generate service worker
+        return new Promise(function(resolve, reject) {
+            swPrecache.write('sw.js', {
+                dontCacheBustUrlsMatching : '/./',
+                staticFileGlobs: ['dist/**/*.{js,css,png,jpg,gif,svg,eot,ttf,woff}'],
+                stripPrefix: 'dist'
+            }, function(err, result) {
+                if(err) {
+                    return reject(err)
+                }
+    
+                return resolve(result)
+            });
+        })
+    }).then(function(result) {
+        return new Promise(function(resolve, reject) {
+            // copy service worker to dist folder
+            gulp.src('sw.js')
+            .on('error', reject)
+            .pipe(gulp.dest('dist'))
+            .on('end', resolve)
+        })
+
+    }).catch(function(err) {
+        console.log(err)
     })
 })
 

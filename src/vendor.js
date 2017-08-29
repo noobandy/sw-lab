@@ -1,5 +1,10 @@
 'use strict'
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
 import './themes/sticky-footer.css'
+import './themes/ng-cloak.css'
 import angular from 'angular'
 import uiRouter from 'angular-ui-router'
+import translate from 'angular-translate'
+import angularSanitize from 'angular-sanitize'
+import translatePartialLoader from 'angular-translate-loader-partial'
+
