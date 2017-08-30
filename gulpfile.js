@@ -67,6 +67,14 @@ gulp.task('version', function() {
                     .pipe(gulp.dest('./src/I18N/'))
                     .on('end', resolve)
 
+                }), new Promise(function(resolve, reject) {
+                    
+                    gulp.src('./clear-old-cache.js')
+                    .pipe(bump({type: userResponse.releaseType}))
+                    .on('error', reject)
+                    .pipe(gulp.dest('./'))
+                    .on('end', resolve)
+                    
                 })]).then(function() {
                     resolve()
                 }).catch(function(err) {
@@ -80,6 +88,7 @@ gulp.task('version', function() {
     })
 })
 
+
 gulp.task('build', ['webpack'], function(cb) {
 
     return new Promise(function(resolve, reject) {
@@ -91,12 +100,29 @@ gulp.task('build', ['webpack'], function(cb) {
         .on('end', resolve)
 
     }).then(function() {
+
         // generate service worker
         return new Promise(function(resolve, reject) {
             swPrecache.write('sw.js', {
+                cacheId: 'static-assets',
                 dontCacheBustUrlsMatching : '/./',
                 staticFileGlobs: ['dist/**/*.{js,css,png,jpg,gif,svg,eot,ttf,woff}'],
-                stripPrefix: 'dist'
+                stripPrefix: 'dist',
+                importScripts: ['clear-old-cache.js'],
+                runtimeCaching: [{
+                    // I18N json files
+                    urlPattern: /I18N\/.+\.json/,
+                    // available options cacheFirst/networkFirst/cacheOnly/fastest/networkOnly
+                    handler: 'cacheFirst',
+                    debug: true,
+                    options: {
+                        cache: {
+                          maxEntries: 1,
+                          maxAgeSeconds: 3600,
+                          name: `I18N-cache-${require('./package.json').version}`
+                        }
+                    }
+                }]
             }, function(err, result) {
                 if(err) {
                     return reject(err)
@@ -114,6 +140,14 @@ gulp.task('build', ['webpack'], function(cb) {
             .on('end', resolve)
         })
 
+    }).then(function() {
+        // copy clear-old-cache js
+        return new Promise(function(resolve, reject) {
+            gulp.src('./clear-old-cache.js')
+            .pipe(gulp.dest('dist'))
+            .on('error', reject)
+            .on('end', resolve)
+        })
     }).catch(function(err) {
         console.log(err)
     })

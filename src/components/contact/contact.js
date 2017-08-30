@@ -1,19 +1,9 @@
 'use strict'
 import angular from 'angular'
 import uiRouter from 'angular-ui-router'
+import contactComponent from './contactComponent'
 
-class ContactController {
-    constructor() {
-    }
-
-    $onInit() {
-        this.message = 'Contact'
-    }
-}
-
-let template = '<message message="vm.message"><message>'
-
-let contactModule = angular.module('contact', [uiRouter])
+const contactModule = angular.module('contact', [uiRouter])
 .config(
     /*@ngInject*/
     function($stateProvider) {
@@ -24,10 +14,6 @@ let contactModule = angular.module('contact', [uiRouter])
         })
     }
 )
-.component('contact', {
-    controller: ContactController,
-    template: template,
-    controllerAs: 'vm'
-})
+.component('contact', contactComponent)
 
 export default contactModule.name
