@@ -5,8 +5,10 @@ const del = require('del')
 const replace = require('gulp-string-replace')
 const bump = require('gulp-bump');
 const prompt = require('gulp-prompt')
-const swPrecache = require('sw-precache');
+const swPrecache = require('sw-precache')
 const filter = require('gulp-filter')
+const uglify = require('gulp-uglify')
+const gzip = require('gulp-gzip')
 
 /**
  * then(function(result) {
@@ -135,6 +137,7 @@ gulp.task('build', ['webpack'], function(cb) {
         return new Promise(function(resolve, reject) {
             // copy service worker to dist folder
             gulp.src('sw.js')
+            .pipe(uglify())
             .on('error', reject)
             .pipe(gulp.dest('dist'))
             .on('end', resolve)
@@ -144,6 +147,10 @@ gulp.task('build', ['webpack'], function(cb) {
         // copy clear-old-cache js
         return new Promise(function(resolve, reject) {
             gulp.src('./clear-old-cache.js')
+            .pipe(uglify())
+            .on('error', reject)
+            // .pipe(gzip())
+            // .on('error', reject)
             .pipe(gulp.dest('dist'))
             .on('error', reject)
             .on('end', resolve)
