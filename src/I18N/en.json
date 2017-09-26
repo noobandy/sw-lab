@@ -1,7 +1,7 @@
 {
     "application.name": "SW-Lab",
-    "application.version": "2.0.0",
+    "application.version": "2.0.1",
     "menu.home": "Home",
     "menu.about": "About",
-    "menu.contact": "Contact"
+    "menu.contact": "Contact US"
 }

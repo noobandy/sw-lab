@@ -2,29 +2,12 @@ const gulp = require('gulp')
 const webpak = require('webpack')
 const webpackConfig = require('./webpack.config')
 const del = require('del')
-const replace = require('gulp-string-replace')
 const bump = require('gulp-bump');
 const prompt = require('gulp-prompt')
 const swPrecache = require('sw-precache')
-const filter = require('gulp-filter')
 const uglify = require('gulp-uglify')
 const gzip = require('gulp-gzip')
 
-/**
- * then(function(result) {
-
-        return new Promise(function(resolve, reject) {
-            const pkg = require('./package.json')
-            
-            gulp.src('dist/index.html', { base: 'dist'})
-            .pipe(replace(new RegExp('@version@', 'g'), pkg.version))
-            .on('error', reject)
-            .pipe(gulp.dest('dist'))
-            .on('end', resolve)
-        })
-       
-    })
- */
 gulp.task('clean', function() {
     return del(['dist'])
 })

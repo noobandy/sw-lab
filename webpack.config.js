@@ -48,11 +48,10 @@ module.exports = {
                 test: /\.js$/,
                 exclude: [/node_modules/],
                 use: [{
-                    loader: 'ng-annotate-loader',
-                    options: {
-                        ngAnnotate: 'ng-annotate-patched',
-                        es6: true,
-                        explicitOnly: false
+                    loader: 'babel-loader',
+                    query: {
+                        presets: ['es2015'],
+                        plugins: ["angularjs-annotate"]
                     }
                 }]
             }

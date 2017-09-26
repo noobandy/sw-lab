@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["/89889688147bd7575d6327160d64e760.svg","89889688147bd7575d6327160d64e760"],["/app.d63470fb6ba08ef04feb.bundle.js","393a55eccbde9e44db31ab999049d45d"],["/e18bbf611f2a2e43afc071aa2f4e1512.ttf","e18bbf611f2a2e43afc071aa2f4e1512"],["/f4769f9bdb7466be65088239c12046d1.eot","f4769f9bdb7466be65088239c12046d1"],["/fa2772327f55d8198301fdb8bcfc8158.woff","fa2772327f55d8198301fdb8bcfc8158"],["/runtime.3aa70b19da00e6b39c69.bundle.js","46f869cf2dee8c916bc9c43c04e1d40b"],["/vendor.ace05931067b6e8b1a87.bundle.css","c1223ba9f5b154c1411e6091d9fb4116"],["/vendor.ace05931067b6e8b1a87.bundle.js","fe9c289f7c935db62c3304345a9e4734"]];
+var precacheConfig = [["/89889688147bd7575d6327160d64e760.svg","89889688147bd7575d6327160d64e760"],["/app.918e66a2bf5a090c23cd.bundle.js","c489bc9499b652ddd8d53c66d942cde2"],["/e18bbf611f2a2e43afc071aa2f4e1512.ttf","e18bbf611f2a2e43afc071aa2f4e1512"],["/f4769f9bdb7466be65088239c12046d1.eot","f4769f9bdb7466be65088239c12046d1"],["/fa2772327f55d8198301fdb8bcfc8158.woff","fa2772327f55d8198301fdb8bcfc8158"],["/runtime.b2c6973b268e02f198a7.bundle.js","b124083ebc444b336a26c4dc7907feba"],["/vendor.3f3be170b278323b2481.bundle.css","0701c029eb88fed5eb7cea2074187772"],["/vendor.3f3be170b278323b2481.bundle.js","b0baeb02e0ee4942ba8af049a6644eae"]];
 var cacheName = 'sw-precache-v3-static-assets-' + (self.registration ? self.registration.scope : '');
 
 
@@ -285,7 +285,7 @@ self.addEventListener('fetch', function(event) {
 
 // Runtime cache configuration, using the sw-toolbox library.
 
-toolbox.router.get(/I18N\/.+\.json/, toolbox.cacheFirst, {"cache":{"maxEntries":1,"maxAgeSeconds":3600,"name":"I18N-cache-2.0.0"}});
+toolbox.router.get(/I18N\/.+\.json/, toolbox.cacheFirst, {"cache":{"maxEntries":1,"maxAgeSeconds":3600,"name":"I18N-cache-2.0.1"}});
 
 
 
